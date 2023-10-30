@@ -22,24 +22,24 @@ def button():
 
         canvas = Canvas(top, width=680, height=800)
         canvas.pack()
-        image = Image.open(f"/Users/yavuzbuz/Desktop/images/{text_entry}")
-        resized_image = image.resize((700, 400))
+        image = Image.open(f"/Users/yavuzbuz/Desktop/images/{text_entry}").convert("RGBA").resize((700, 400))
 
-        image_width, image_height = resized_image.size
-        draw = ImageDraw.Draw(resized_image)
+        txt = Image.new('RGBA', image.size, (255, 255, 255, 0))
 
+        image_width, image_height = image.size
         font_size = int(image_width / 8)
-        font = ImageFont.truetype("Arial.ttf", font_size)
+        font = ImageFont.truetype("Georgia.ttf", font_size)
 
-        x, y = int(image_width / 2), int(image_height / 2)
+        d = ImageDraw.Draw(txt)
+        d.text((0, 0), "bahilix", fill=(0, 0, 0, 100), font=font)
 
-        draw.text((x, y), "bahilix", font=font, fill="#FFF", stroke_width=5, stroke_fill="#222", anchor="ms")
+        combined = Image.alpha_composite(image, txt)
 
-        new_image = ImageTk.PhotoImage(resized_image)
+        new_image = ImageTk.PhotoImage(combined)
         canvas.create_image(10, 10, anchor=NW, image=new_image)
         canvas.theimage = new_image
 
-        resized_image.save(f"/Users/yavuzbuz/Desktop/watermarked_images/watermarked_{text_entry}")
+        combined.save(f"/Users/yavuzbuz/Desktop/watermarked_images/watermarked_{text_entry}")
 
     btn2 = Button(top,
                   text="Confirm",
